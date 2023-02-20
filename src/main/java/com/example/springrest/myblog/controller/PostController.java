@@ -6,10 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("api/posts")
@@ -21,5 +20,10 @@ public class PostController {
     @PostMapping
     public ResponseEntity<PostDTO> createPost(@RequestBody PostDTO postDTO){
         return new ResponseEntity<PostDTO>(iPostService.createPost(postDTO), HttpStatus.CREATED);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<PostDTO>> getAllPosts(){
+        return new ResponseEntity<List<PostDTO>>(iPostService.getAllPosts(), HttpStatus.OK);
     }
 }
