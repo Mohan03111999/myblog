@@ -48,6 +48,17 @@ public class PostServiceImpl implements IPostService {
         return mapToDTO(post);
     }
 
+    @Override
+    public PostDTO updatePost(PostDTO postDTO, Long id) {
+        Post post = iPostRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Post","id", id));
+        post.setTitle(postDTO.getTitle());
+        post.setDescription(postDTO.getDescription());
+        post.setContent(postDTO.getContent());
+
+        Post updatedPost = iPostRepository.save(post);
+        return mapToDTO(updatedPost);
+    }
+
     private PostDTO mapToDTO(Post post){
         PostDTO postResponse = new PostDTO();
         postResponse.setId(post.getId());
