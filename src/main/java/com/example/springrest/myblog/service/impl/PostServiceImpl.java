@@ -1,6 +1,7 @@
 package com.example.springrest.myblog.service.impl;
 
 import com.example.springrest.myblog.entity.Post;
+import com.example.springrest.myblog.exception.ResourceNotFoundException;
 import com.example.springrest.myblog.payload.PostDTO;
 import com.example.springrest.myblog.repository.IPostRepository;
 import com.example.springrest.myblog.service.IPostService;
@@ -39,6 +40,12 @@ public class PostServiceImpl implements IPostService {
             postDTOS.add(mapToDTO(post));
         }*/
         return postList.stream().map(post -> mapToDTO(post)).collect(Collectors.toList());
+    }
+
+    @Override
+    public PostDTO getPostByID(Long id) {
+        Post post = iPostRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("Post","id", id));
+        return mapToDTO(post);
     }
 
     private PostDTO mapToDTO(Post post){
