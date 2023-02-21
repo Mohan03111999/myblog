@@ -12,4 +12,6 @@ public interface IPostService {
 
     public PostDTO getPostByID(Long id);
     public PostDTO updatePost(PostDTO postDTO, Long id);
+
+    public void deletePost(Long id);
 }
