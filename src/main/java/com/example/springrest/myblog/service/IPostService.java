@@ -8,7 +8,7 @@ public interface IPostService {
 
     public PostDTO createPost(PostDTO postDTO);
 
-    public List<PostDTO> getAllPosts();
+    public List<PostDTO> getAllPosts(int pageNo, int pageSize);
 
     public PostDTO getPostByID(Long id);
     public PostDTO updatePost(PostDTO postDTO, Long id);

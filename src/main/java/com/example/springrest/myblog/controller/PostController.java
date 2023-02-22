@@ -23,8 +23,11 @@ public class PostController {
     }
 
     @GetMapping
-    public ResponseEntity<List<PostDTO>> getAllPosts(){
-        return new ResponseEntity<List<PostDTO>>(iPostService.getAllPosts(), HttpStatus.OK);
+    public ResponseEntity<List<PostDTO>> getAllPosts(
+            @RequestParam(value = "pageNo",defaultValue = "0",required = false) int pageNo,
+            @RequestParam(value = "pageSize",defaultValue = "5",required = false) int pageSize
+            ){
+        return new ResponseEntity<List<PostDTO>>(iPostService.getAllPosts(pageNo,pageSize), HttpStatus.OK);
     }
 
     @GetMapping("{id}")

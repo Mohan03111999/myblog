@@ -6,8 +6,11 @@ import com.example.springrest.myblog.payload.PostDTO;
 import com.example.springrest.myblog.repository.IPostRepository;
 import com.example.springrest.myblog.service.IPostService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.awt.print.Pageable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -32,14 +35,16 @@ public class PostServiceImpl implements IPostService {
     }
 
     @Override
-    public List<PostDTO> getAllPosts() {
-        List<Post> postList = iPostRepository.findAll();
+    public List<PostDTO> getAllPosts(int pageNo, int pageSize) {
+        PageRequest pageable= PageRequest.of(pageNo,pageSize);
+        Page<Post> postList = iPostRepository.findAll(pageable);
         /*List<PostDTO> postDTOS = new ArrayList<>();
         //convert entity to dto to return
         for(Post post: postList){
             postDTOS.add(mapToDTO(post));
         }*/
-        return postList.stream().map(post -> mapToDTO(post)).collect(Collectors.toList());
+        List<Post> posts = postList.getContent();
+        return posts.stream().map(post -> mapToDTO(post)).collect(Collectors.toList());
     }
 
     @Override
