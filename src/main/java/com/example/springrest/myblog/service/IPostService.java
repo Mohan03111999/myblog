@@ -1,6 +1,7 @@
 package com.example.springrest.myblog.service;
 
 import com.example.springrest.myblog.payload.PostDTO;
+import com.example.springrest.myblog.payload.PostResponse;
 
 import java.util.List;
 
@@ -8,7 +9,7 @@ public interface IPostService {
 
     public PostDTO createPost(PostDTO postDTO);
 
-    public List<PostDTO> getAllPosts(int pageNo, int pageSize);
+    public PostResponse getAllPosts(int pageNo, int pageSize);
 
     public PostDTO getPostByID(Long id);
     public PostDTO updatePost(PostDTO postDTO, Long id);

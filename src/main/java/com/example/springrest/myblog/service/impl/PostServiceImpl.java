@@ -3,6 +3,7 @@ package com.example.springrest.myblog.service.impl;
 import com.example.springrest.myblog.entity.Post;
 import com.example.springrest.myblog.exception.ResourceNotFoundException;
 import com.example.springrest.myblog.payload.PostDTO;
+import com.example.springrest.myblog.payload.PostResponse;
 import com.example.springrest.myblog.repository.IPostRepository;
 import com.example.springrest.myblog.service.IPostService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +36,7 @@ public class PostServiceImpl implements IPostService {
     }
 
     @Override
-    public List<PostDTO> getAllPosts(int pageNo, int pageSize) {
+    public PostResponse getAllPosts(int pageNo, int pageSize) {
         PageRequest pageable= PageRequest.of(pageNo,pageSize);
         Page<Post> postList = iPostRepository.findAll(pageable);
         /*List<PostDTO> postDTOS = new ArrayList<>();
@@ -44,7 +45,15 @@ public class PostServiceImpl implements IPostService {
             postDTOS.add(mapToDTO(post));
         }*/
         List<Post> posts = postList.getContent();
-        return posts.stream().map(post -> mapToDTO(post)).collect(Collectors.toList());
+        List<PostDTO> content = posts.stream().map(post -> mapToDTO(post)).collect(Collectors.toList());
+        PostResponse postResponse = new PostResponse();
+        postResponse.setContent(content);
+        postResponse.setPageNo(postList.getNumber());
+        postResponse.setPageSize((postList.getSize()));
+        postResponse.setTotalElements(postList.getTotalElements());
+        postResponse.setTotalPages(postList.getTotalPages());
+        postResponse.setLast(postList.isLast());
+        return postResponse;
     }
 
     @Override

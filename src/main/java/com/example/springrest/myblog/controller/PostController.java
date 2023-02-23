@@ -1,6 +1,7 @@
 package com.example.springrest.myblog.controller;
 
 import com.example.springrest.myblog.payload.PostDTO;
+import com.example.springrest.myblog.payload.PostResponse;
 import com.example.springrest.myblog.service.IPostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,11 +24,11 @@ public class PostController {
     }
 
     @GetMapping
-    public ResponseEntity<List<PostDTO>> getAllPosts(
+    public ResponseEntity<PostResponse> getAllPosts(
             @RequestParam(value = "pageNo",defaultValue = "0",required = false) int pageNo,
             @RequestParam(value = "pageSize",defaultValue = "5",required = false) int pageSize
             ){
-        return new ResponseEntity<List<PostDTO>>(iPostService.getAllPosts(pageNo,pageSize), HttpStatus.OK);
+        return new ResponseEntity<PostResponse>(iPostService.getAllPosts(pageNo,pageSize), HttpStatus.OK);
     }
 
     @GetMapping("{id}")
