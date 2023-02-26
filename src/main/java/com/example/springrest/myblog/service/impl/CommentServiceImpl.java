@@ -11,6 +11,9 @@ import com.example.springrest.myblog.service.ICommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class CommentServiceImpl implements ICommentService {
 
@@ -27,6 +30,12 @@ public class CommentServiceImpl implements ICommentService {
         commentResponse.setPost(post);
         Comment newComment = iCommentRepository.save(commentResponse);
         return mapToDTO(newComment);
+    }
+
+    @Override
+    public List<CommentDTO> getAllComments(Long postId) {
+        List<Comment> comment = iCommentRepository.findByPostId(postId);
+        return comment.stream().map(comment1 -> mapToDTO(comment1)).collect(Collectors.toList());
     }
 
     private CommentDTO mapToDTO(Comment comment){
