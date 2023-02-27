@@ -2,6 +2,7 @@ package com.example.springrest.myblog.service.impl;
 
 import com.example.springrest.myblog.entity.Comment;
 import com.example.springrest.myblog.entity.Post;
+import com.example.springrest.myblog.exception.BlogAPIException;
 import com.example.springrest.myblog.exception.ResourceNotFoundException;
 import com.example.springrest.myblog.payload.CommentDTO;
 import com.example.springrest.myblog.payload.PostDTO;
@@ -9,6 +10,7 @@ import com.example.springrest.myblog.repository.ICommentRepository;
 import com.example.springrest.myblog.repository.IPostRepository;
 import com.example.springrest.myblog.service.ICommentService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -36,6 +38,19 @@ public class CommentServiceImpl implements ICommentService {
     public List<CommentDTO> getAllComments(Long postId) {
         List<Comment> comment = iCommentRepository.findByPostId(postId);
         return comment.stream().map(comment1 -> mapToDTO(comment1)).collect(Collectors.toList());
+    }
+
+    @Override
+    public CommentDTO getCommentById(Long postId, Long id) {
+        //retrieve by post id
+        Post post = iPostRepository.findById(postId).orElseThrow(()->new ResourceNotFoundException("Post","id",postId));
+        //retrieve by comment id
+        Comment comment = iCommentRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Comment","id",id));
+
+        if(!comment.getPost().getId().equals(post.getId())){
+            throw new BlogAPIException(HttpStatus.BAD_REQUEST, "Comment does not belong to Post");
+        }
+        return mapToDTO(comment);
     }
 
     private CommentDTO mapToDTO(Comment comment){
