@@ -53,6 +53,23 @@ public class CommentServiceImpl implements ICommentService {
         return mapToDTO(comment);
     }
 
+    @Override
+    public CommentDTO updateComment(Long postId, Long commentId, CommentDTO commentDTO) {
+        //retrieve by post id
+        Post post = iPostRepository.findById(postId).orElseThrow(()->new ResourceNotFoundException("Post","id",postId));
+        //retrieve by comment id
+        Comment comment = iCommentRepository.findById(commentId).orElseThrow(()->new ResourceNotFoundException("Comment","id",commentId));
+        if(!comment.getPost().getId().equals(post.getId())){
+            throw new BlogAPIException(HttpStatus.BAD_REQUEST, "Comment does not belong to Post");
+        }
+        comment.setName(commentDTO.getName());
+        comment.setEmail(commentDTO.getEmail());
+        comment.setMessageBody(commentDTO.getMessageBody());
+
+        Comment updatedComment = iCommentRepository.save(comment);
+        return mapToDTO(updatedComment);
+    }
+
     private CommentDTO mapToDTO(Comment comment){
         CommentDTO commentDTO = new CommentDTO();
         commentDTO.setId(comment.getId());
